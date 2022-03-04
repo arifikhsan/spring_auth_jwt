@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity(name = "roles")
@@ -15,6 +16,11 @@ import javax.persistence.Id;
 @Setter
 public class RoleDomain {
     @Id
+    @GeneratedValue
     private Long id;
     private String name;
+
+    public RoleDomain(String name) {
+        this.name = name;
+    }
 }
