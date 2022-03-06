@@ -2,32 +2,27 @@ package com.example.spring_auth_jwt.seeder;
 
 import com.example.spring_auth_jwt.domain.RoleDomain;
 import com.example.spring_auth_jwt.domain.UserDomain;
-import com.example.spring_auth_jwt.domain.UserRoleDomain;
-import com.example.spring_auth_jwt.repository.RoleRepository;
-import com.example.spring_auth_jwt.repository.UserRepository;
-import com.example.spring_auth_jwt.repository.UserRoleRepository;
+import com.example.spring_auth_jwt.service.RoleService;
+import com.example.spring_auth_jwt.service.UserRoleService;
+import com.example.spring_auth_jwt.service.UserService;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Set;
-
 @Configuration
+@AllArgsConstructor
 public class DatabaseSeeder {
     @Bean
-    CommandLineRunner commandLineRunner(
-            UserRepository userRepository,
-            RoleRepository roleRepository,
-            UserRoleRepository userRoleRepository) {
-
+    CommandLineRunner commandLineRunner(UserService userService, RoleService roleService, UserRoleService userRoleService) {
         return args -> {
             var role = new RoleDomain("admin");
-            var user = new UserDomain("user@example", "123456");
+            var user = new UserDomain("admin", "admin@example.com", "123456");
 
-            var savedRole = roleRepository.save(role);
-            var savedUser = userRepository.save(user);
-            var userRole = new UserRoleDomain(savedUser, savedRole);
-            userRoleRepository.save(userRole);
+            var savedRole = roleService.create(role);
+            var savedUser = userService.create(user);
+            userRoleService.create(savedUser, savedRole);
         };
     }
 }
